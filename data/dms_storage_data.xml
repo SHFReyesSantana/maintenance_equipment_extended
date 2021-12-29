@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="storage_maintenance_request" model="dms.storage">
+            <field name="name">Maintenance Storage</field>
+            <field name="save_type">database</field>
+        </record>
+    </data>
+</odoo>

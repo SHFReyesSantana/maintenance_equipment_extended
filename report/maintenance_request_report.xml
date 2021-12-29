@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <report
+                id="maintenance_request_report"
+                model="maintenance.request"
+                string="Print Request"
+                name="maintenance_equipment_extended.template_maintenance_request"
+                file="maintenance_equipment_extended.template_maintenance_request"
+                report_type="qweb-pdf"/>
+
+        <template id="style_table">
+            <link rel="stylesheet" type="text/css" href="/maintenance_equipment_extended/static/src/css/report_style.css"/>
+        </template>
+
+        <template id="template_maintenance_request">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <p t-call="maintenance_equipment_extended.style_table"/>
+                        <div class="page">
+                            <h3 t-att-style="'text-align: center; color: %s;' % doc.company_id.primary_color">
+                                <strong><span t-field="doc.code"/></strong>&#160;<span t-field="doc.name"/>
+                            </h3>
+                            <br/>
+                            <div class="a_header">
+                                <table>
+                                    <tr>
+                                        <th colspan="2">Equipment</th>
+                                        <th>Category</th>
+                                        <th>Location</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <i class="fa fa-cogs" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.equipment_id.name"/>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-caret-square-o-right" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.category_id"/></td>
+                                        <td>
+                                            <i class="fa fa-building-o" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.equipment_id.location_id.complete_name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Technician</th>
+                                        <th>Speciality</th>
+                                        <th>Duration</th>
+                                        <th>Priority</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-user" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.user_id.name"/>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-handshake-o" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.specialty"/>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-clock-o" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.duration" t-options="{'widget': 'float_time'}"/>&#160;Horas
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-star" aria-hidden="true"/>&#160;
+                                            <span t-field="doc.priority"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <hr style="border: 1px solid #696969"></hr>
+                            <br/>
+                            <t t-if="doc.uom_id is not False">
+                                <div class="div_1">
+                                    <strong>Please enter the requested data:</strong>
+                                    <br/>
+                                    <span t-field="doc.uom_id.name"/>&#160;
+                                    <svg width="150" height="18"><rect width="150" height="18" rx="5" ry="5" stroke="black" fill="white"/></svg>
+                                </div>
+                            </t>
+                            <br/>
+                            <t t-if="doc.process is not False">
+                                <div class="div_2">
+                                    <strong>Process:</strong>
+                                    <br/>
+                                    <span t-field="doc.process"/>
+                                </div>
+                            </t>
+                            <br/>
+                            <t t-if="doc.notes is not False">
+                                <div class="div_2">
+                                    <strong>Notes:</strong>
+                                    <br/>
+                                    <span t-field="doc.notes"/>
+                                </div>
+                            </t>
+                            <br/>
+                            <t t-if="len(doc.products_ids) > 0">
+                                <h4 style="text-align: center; ">
+                                    <span t-att-style="'color: %s;' % doc.company_id.primary_color">Supplies</span>
+                                </h4>
+                                <div class="a_body">
+                                    <table>
+                                        <tr>
+                                            <th>Internal Reference</th>
+                                            <th>Unit</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                        <t t-foreach="doc.products_ids" t-as="line">
+                                            <tr style="border-bottom: solid 1px #0000FF;">
+                                                <td><span t-field="line.name"/></td>
+                                                <td><span t-field="line.uom"/></td>
+                                                <td><span t-field="line.product_uom_qty"/></td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                            </t>
+                            <br/>
+                            <div class="container">
+                                <div class="content">
+                                    <strong>I check the maintenance:</strong>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <t t-if="doc.equipment_id.equipment_assign_to == 'employee'">
+                                        <div style="background: #bfbfbf;">
+                                            <span t-field="doc.equipment_id.employee_id.name"/>
+                                        </div>
+                                    </t>
+                                </div>
+                                <div class="content">
+                                    <strong>Maintenance performed by</strong>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <div style="background: #bfbfbf;"><span t-field="doc.user_id.name"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

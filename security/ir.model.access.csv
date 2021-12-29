@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_maintenance_location,maintenance.location.user,model_maintenance_location,base.group_user,1,1,1,1
+access_maintenance_specialty,maintenance.specialty.user,model_maintenance_specialty,base.group_user,1,1,1,1
+access_maintenance_plan,maintenance.plan.user,model_maintenance_plan,base.group_user,1,1,1,1
+access_maintenance_plan_part,maintenance.plan.part.user,model_maintenance_plan_part,base.group_user,1,1,1,1
+access_maintenance_plan_docs,maintenance.plan.docs.user,model_maintenance_plan_docs,base.group_user,1,1,1,1
+access_maintenance_task,maintenance.task.user,model_maintenance_task,base.group_user,1,1,1,1
+access_maintenance_task_docs,maintenance.task.docs.user,model_maintenance_task_docs,base.group_user,1,1,1,1
+access_maintenance_equipment_line,maintenance.equipment.line,model_maintenance_equipment_line,base.group_user,1,1,1,1
+access_maintenance_task_product,maintenance.task.product.user,model_maintenance_task_product,base.group_user,1,1,1,1
+access_maintenance_equipment_measure,maintenance.equipment.measure,model_maintenance_equipment_measure,base.group_user,1,1,1,1

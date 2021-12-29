@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="maintenance_task_view_tree">
+            <field name="name">Maintenance Task List</field>
+            <field name="model">maintenance.task</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance Task">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_task_view_form">
+            <field name="name">Maintenance Task Form</field>
+            <field name="model">maintenance.task</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <group style="width: 30%">
+                                <field name="frequency" widget="selection" options="{False: False}"/>
+                            </group>
+                            <group style="width: 70%">
+                                <templates>
+                                    <div class="o_row" attrs="{'invisible':[('frequency','in',('read','mixed',False))]}">
+                                        <field name="frequency_date"/>
+                                        <field name="frequency_date_val"/>
+                                    </div>
+                                    <div class="o_row" attrs="{'invisible':[('frequency','in',('date', 'mixed',False))]}">
+                                        <field name="frequency_read"/>
+                                        <field name="frequency_read_val"/>
+                                    </div>
+                                    <div class="o_row" attrs="{'invisible':[('frequency','in',('date','read',False))]}">
+                                        <field name="frequency_date"/>
+                                        <field name="frequency_date_val"/>
+                                        <strong> -- Or Every -- </strong>
+                                        <field name="frequency_read"/>
+                                        <field name="frequency_read_val"/>
+                                    </div>
+                                </templates>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="stop_days"/>
+                            </group>
+                            <group>
+                                <field name="stop_hours" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="priority" widget="priority"/>
+                            </group>
+                            <group>
+                                <field name="duration" widget="float_time"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="ext_maintenance"/>
+                            </group>
+                            <group>
+                                <field name="partner_id" widget="res_partner_many2one" attrs="{'invisible': [('ext_maintenance','=',False)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="specialty_id"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="predictive" widget="radio"/>
+                            </group>
+                            <group>
+                                <field name="unit" attrs="{'invisible':[('predictive', '=', '0')]}"/>
+                                <field name="unit_min" attrs="{'invisible':[('predictive', 'in', ('0', '2'))]}"/>
+                                <field name="unit_max" attrs="{'invisible':[('predictive', 'in', ('0', '1'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Process">
+                                <field name="process" class="oe_inline" placeholder="Define your process ..."/>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes" class="oe_inline" placeholder="Define your notes ..."/>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Attachments ">
+                                <field name="document_ids">
+                                    <tree string="Documents">
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                    </tree>
+                                    <form string="Documents">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="name"/>
+                                                </group>
+                                                <group>
+                                                    <field name="file_data" filename="file_name"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Supplies">
+                                <field name="product_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control" string="Add a product"/>
+                                            <create name="add_section_control" string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                            <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                                        </control>
+                                        <field name="product_id" string="Internal Reference"/>
+                                        <field name="name"/>
+                                        <field name="uom"/>
+                                        <field name="product_uom_qty"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="product_id" string="Internal Reference"/>
+                                            <field name="name"/>
+                                            <field name="uom"/>
+                                            <field name="product_uom_qty"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_task_action'>
+            <field name="name">Maintenance Task</field>
+            <field name="res_model">maintenance.task</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="maintenance_task_menu"
+                  parent="maintenance.menu_maintenance_configuration"
+                  sequence="60"
+                  action="maintenance_task_action"/>
+
+        <record model="ir.ui.view" id="maintenance_task_view_pivot">
+            <field name="name">maintenance.task.view.pivot</field>
+            <field name="model">maintenance.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Maintenance Plan">
+                    <field name="part_id" type="row"/>
+                    <field name="name" type="row"/>
+                    <field name="specialty_id" type="col"/>
+                    <field name="duration" type="measure" widget="float_time"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_task_action_from_equipment'>
+            <field name="name">Maintenance Plan Part</field>
+            <field name="res_model">maintenance.task</field>
+            <field name="view_mode">pivot</field>
+            <field name="domain">[('part_id.plan_id.equipment_ids', '=', active_id)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="maintenance_stage_tree_inherit">
+            <field name="name">maintenance.stage.tree.inherit</field>
+            <field name="model">maintenance.stage</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_stage_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree string="Maintenance Request Stage">
+                        <field name="sequence" widget="handle"/>
+                        <field name="name"/>
+                        <field name="fold"/>
+                        <field name="done"/>
+                        <field name="color" widget="int_color"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_stage_form_view">
+            <field name="name">maintenance.stage.form.view</field>
+            <field name="model">maintenance.stage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="fold"/>
+                            <field name="done"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="color" widget="int_color"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

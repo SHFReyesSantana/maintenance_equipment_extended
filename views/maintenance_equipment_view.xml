@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="maintenance_equipment_form_inherit">
+            <field name="name">maintenance.equipment.form.inherit</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button string="Update Request" type="object" name="update_request" class="oe_highlight" attrs="{'invisible': [('equipment_line_ids', '=', [])]}"/>
+                    </header>
+                </xpath>
+                <xpath expr="//sheet/div/button" position="before">
+                    <button class="oe_stat_button" name="action_view_po" type="object" icon="fa-shopping-cart"
+                            attrs="{'invisible': [('purchase_number', '=', 0)]}">
+                        <field name="purchase_number" string="Purchase" widget="statinfo"/>
+                    </button>
+                    <button name="%(maintenance_task_action_from_equipment)d" type="action" class="oe_stat_button" icon="fa-cogs">
+                        <field string="Parts" name="part_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+                <xpath expr="//sheet/div/h1" position="after">
+                    <h2>
+                        <field name="plan_id"/>
+                    </h2>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='scrap_date']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='location']" position="replace">
+                    <field name="location_id"/>
+                </xpath>
+                <xpath expr="//notebook/page[3]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Task Request">
+                        <field name="equipment_line_ids">
+                            <tree>
+                                <field name="part"/>
+                                <field name="task_id"/>
+                                <field name="priority"/>
+                                <field name="request"/>
+                                <field name="date_application"/>
+                                <field name="date_execution"/>
+                                <field name="date_next_request"/>
+                                <field name="duration" widget="float_time"/>
+                                <button name="number_request" type="object" string="Process" class="oe_highlight" attrs="{'invisible':[('request', '!=', False)]}"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="task_id"/>
+                                    </group>
+                                    <group>
+                                        <group style="width: 25%">
+                                            <field name="frequency" widget="radio"/>
+                                        </group>
+                                        <group style="width: 75%">
+                                            <templates>
+                                                <div class="o_row" attrs="{'invisible':[('frequency','in',('read','mixed',False))]}">
+                                                    <strong>Frequency</strong>
+                                                    <field name="frequency_date"/>
+                                                    <field name="frequency_date_val"/>
+                                                </div>
+                                                <div class="o_row" attrs="{'invisible':[('frequency','in',('date', 'mixed',False))]}">
+                                                    <strong>Frequency</strong>
+                                                    <field name="frequency_read"/>
+                                                    <field name="frequency_read_val"/>
+                                                </div>
+                                                <div class="o_row" attrs="{'invisible':[('frequency','in',('date','read',False))]}">
+                                                    <strong>Frequency</strong>
+                                                    <field name="frequency_date"/>
+                                                    <field name="frequency_date_val"/>
+                                                    <strong> -- Or Every -- </strong>
+                                                    <field name="frequency_read"/>
+                                                    <field name="frequency_read_val"/>
+                                                </div>
+                                            </templates>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="stop_days"/>
+                                        </group>
+                                        <group>
+                                            <field name="stop_hours" widget="float_time"/>
+                                        </group>
+                                        <group>
+                                            <field name="priority" widget="priority"/>
+                                        </group>
+                                        <group>
+                                            <field name="duration" widget="float_time"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="ext_maintenance"/>
+                                        </group>
+                                        <group>
+                                            <field name="partner_id" widget="res_partner_many2one"
+                                                   attrs="{'invisible': [('ext_maintenance','=',False)]}"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="specialty_id"/>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="predictive" widget="radio"/>
+                                        </group>
+                                        <group>
+                                            <field name="unit" attrs="{'invisible':[('predictive', '=', '0')]}"/>
+                                            <field name="unit_min" attrs="{'invisible':[('predictive', 'in', ('0', '2'))]}"/>
+                                            <field name="unit_max" attrs="{'invisible':[('predictive', 'in', ('0', '1'))]}"/>
+                                        </group>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                    <page string="Measure">
+                        <field name="equipment_measure_ids">
+                            <tree string="Measures" create="false" delete="false">
+                                <field name="uom_id"/>
+                                <field name="value"/>
+                            </tree>
+                            <form create="false" delete="false">
+                                <group>
+                                    <field name="uom_id"/>
+                                    <field name="value"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

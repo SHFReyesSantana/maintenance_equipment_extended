@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="maintenance_location_view_tree">
+            <field name="name">Maintenance Location List</field>
+            <field name="model">maintenance.location</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="complete_name" string="Maintenance Location"/>
+                    <field name="equipments_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_location_view_form">
+            <field name="name">Maintenance Location Form</field>
+            <field name="model">maintenance.location</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Category name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Lamps"/></h1>
+                        </div>
+                        <group name="first" col="2">
+                            <field name="parent_id" class="oe_inline"/>
+                        </group>
+                        <group>
+                            <field name="stock_type_id" />
+                            <field name="location_id"/>
+                            <field name="location_dest_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Equipments">
+                                <field name="equipments_ids">
+                                    <tree string="Equipment">
+                                        <field name="name"/>
+                                        <field name="owner_user_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_location_action'>
+            <field name="name">Maintenance Location</field>
+            <field name="res_model">maintenance.location</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="maintenance_location_menu"
+                  parent="maintenance.menu_maintenance_configuration"
+                  sequence="30"
+                  action="maintenance_location_action"/>
+    </data>
+</odoo>

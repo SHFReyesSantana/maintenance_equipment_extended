@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="maintenance_plan_view_tree">
+            <field name="name">Maintenance Plan List</field>
+            <field name="model">maintenance.plan</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance Plan">
+                    <field name="name"/>
+                    <field name="part_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_plan_view_form">
+            <field name="name">maintenance.plan.view.form</field>
+            <field name="model">maintenance.plan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="part_ids"/>
+                        </group>
+                        <notebook>
+                            <page string="Notes of plan">
+                                <field name="notes" class="oe_inline" placeholder="Define your notes of plan ..."/>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Attachments of plan">
+                                <field name="document_ids">
+                                    <tree string="Documents">
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                    </tree>
+                                    <form string="Documents">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="name"/>
+                                                </group>
+                                                <group>
+                                                    <field name="file_data" filename="file_name"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_plan_action'>
+            <field name="name">Maintenance Plan</field>
+            <field name="res_model">maintenance.plan</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="maintenance_plan_menu"
+                  parent="maintenance.menu_maintenance_configuration"
+                  sequence="50"
+                  action="maintenance_plan_action"/>
+    </data>
+</odoo>

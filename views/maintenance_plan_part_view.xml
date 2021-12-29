@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="maintenance_plan_part_view_tree">
+            <field name="name">Maintenance Plan Part List</field>
+            <field name="model">maintenance.plan.part</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance Plan Part">
+                    <field name="complete_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_plan_part_view_form">
+            <field name="name">maintenance.plan.part.view.form</field>
+            <field name="model">maintenance.plan.part</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Part Name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. Lamps"/>
+                            </h1>
+                        </div>
+                        <group name="first" col="2">
+                            <field name="parent_id" class="oe_inline"/>
+                        </group>
+                        <notebook>
+                            <page string="Task">
+                                <field name="task_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="maintenance_plan_part_view_pivot">
+            <field name="name">maintenance.plan.part.view.pivot</field>
+            <field name="model">maintenance.plan.part</field>
+            <field name="arch" type="xml">
+                <pivot string="Maintenance Plan">
+                    <field name="plan_id" type="row"/>
+                    <field name="complete_name" type="row"/>
+                    <field name="plan_id">
+                        <field name="notes" type="row"/>
+                    </field>
+                </pivot>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_plan_part_action'>
+            <field name="name">Maintenance Plan Part</field>
+            <field name="res_model">maintenance.plan.part</field>
+            <field name="view_mode">tree,form,pivot</field>
+        </record>
+
+        <menuitem id="maintenance_plan_part_menu"
+                  parent="maintenance.menu_maintenance_configuration"
+                  sequence="70"
+                  action="maintenance_plan_part_action"/>
+
+    </data>
+</odoo>
