@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
@@ -146,7 +148,7 @@ class MaintenanceEquipmentLine(models.Model):
                 number = self.create_request()
                 self.update({
                     'request': number.code,
-                    'date_application': number.request_date,
+                    'date_application': datetime.strftime((number.request_create_date - timedelta(hours=5)), '%Y-%m-%d %H:%M'),
                 })
                 if len(number.products_ids) > 0:
                     stock = self.create_stock(number)
@@ -172,6 +174,7 @@ class MaintenanceEquipmentLine(models.Model):
             'request_docs_ids': self.task_id.document_ids,
             'maintenance_team_id': self.maintenance_team_id.id,
             'maintenance_type': 'predictive' if self.unit else 'preventive',
+            'request_create_date': datetime.now(),
             'uom_id': self.unit.id if self.unit else False
         }
         number = self.env['maintenance.request'].create(vals)

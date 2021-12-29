@@ -19,6 +19,9 @@
                         </button>
                     </div>
                 </xpath>
+                <xpath expr="//field[@name='request_date']" position="replace">
+                    <field name="request_create_date"/>
+                </xpath>
                 <xpath expr="//sheet/div[2]" position="after">
                     <div class="oe_title">
                         <h1>
@@ -132,8 +135,7 @@
             <field name="model">maintenance.request</field>
             <field name="type">timeline</field>
             <field name="arch" type="xml">
-                <timeline date_start="schedule_date"
-                          date_stop="schedule_date_end"
+                <timeline date_start="request_create_date"
                           string="name"
                           default_group_by="equipment_id"
                           default_group_by_2="default_group_1"

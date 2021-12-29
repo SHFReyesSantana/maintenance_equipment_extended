@@ -47,6 +47,8 @@ class MaintenanceRequest(models.Model):
     default_group_1 = fields.Char(string='JSON', compute="_default_group_1")
     color_request = fields.Char(string='Color Json', compute="_default_colors")
     stage_id_id = fields.Integer(related='stage_id.id')
+    request_create_date = fields.Datetime('Request Date', default=fields.datetime.now(), help="Date requested for the maintenance to happen")
+
 
     _sql_constraints = [
         ('code_unique',
@@ -69,7 +71,7 @@ class MaintenanceRequest(models.Model):
     def _compute_date_request(self):
         for time in self:
             td = timedelta(hours=time.duration)
-            time.duration_request_date = datetime.strftime((datetime(1, 1, 1, 0, 0) + td), '%I:%M')
+            time.duration_request_date = datetime.strftime((datetime(1, 1, 1, 0, 0) + td), '%H:%M')
 
     def _compute_picking_ids(self):
         order = self.env['stock.picking'].search([('origin', '=', self.code)])
