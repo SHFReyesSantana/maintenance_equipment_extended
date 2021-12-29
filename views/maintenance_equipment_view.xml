@@ -104,7 +104,7 @@
                                         </group>
                                     </group>
                                     <group>
-                                        <field name="specialty_id"/>
+                                        <field name="maintenance_team_id"/>
                                     </group>
                                     <group>
                                         <group>

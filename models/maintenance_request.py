@@ -40,7 +40,6 @@ class MaintenanceRequest(models.Model):
     products_ids = fields.Many2many('maintenance.task.product', string='Products')
     process = fields.Text(string='Process')
     request_docs_ids = fields.Many2many('maintenance.task.docs', string='Documents')
-    specialty = fields.Char(string='Specialty')
     uom_id = fields.Many2one(comodel_name='uom.uom', string='Unit Measure Predictive')
     uom_val = fields.Float(string="Units")
     duration_request = fields.Float(string='Durations', store=True)

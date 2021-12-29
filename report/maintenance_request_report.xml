@@ -45,7 +45,7 @@
                                     </tr>
                                     <tr>
                                         <th>Technician</th>
-                                        <th>Speciality</th>
+                                        <th>Maintenance Team</th>
                                         <th>Duration</th>
                                         <th>Priority</th>
                                     </tr>
@@ -58,7 +58,7 @@
                                         </td>
                                         <td>
                                             <i class="fa fa-handshake-o" aria-hidden="true"/>&#160;
-                                            <span t-field="doc.specialty"/>
+                                            <span t-field="doc.maintenance_team_id"/>
                                         </td>
                                         <td>
                                             <i class="fa fa-clock-o" aria-hidden="true"/>&#160;

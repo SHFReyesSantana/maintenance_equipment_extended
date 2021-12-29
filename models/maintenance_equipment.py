@@ -36,7 +36,7 @@ class MaintenanceEquipment(models.Model):
                     'part': part.part_id.complete_name,
                     'priority': part.priority,
                     'predictive': part.predictive,
-                    'specialty_id': part.specialty_id,
+                    'maintenance_team_id': part.maintenance_team_id,
                     'stop_days': part.stop_days,
                     'stop_hours': part.stop_hours,
                     'task_id': part.id,
@@ -128,7 +128,7 @@ class MaintenanceEquipmentLine(models.Model):
         default='0')
     process = fields.Text(string='Process')
     request = fields.Char(string='Request')
-    specialty_id = fields.Many2one(comodel_name='maintenance.specialty', string='Specialty')
+    maintenance_team_id = fields.Many2one(comodel_name='maintenance.team', string='Maintenance Team')
     stop_days = fields.Integer(string='Stop Days')
     stop_hours = fields.Integer(string='Stop Hours')
     task_id = fields.Many2one(comodel_name='maintenance.task')
@@ -170,7 +170,7 @@ class MaintenanceEquipmentLine(models.Model):
             'process': self.task_id.process,
             'products_ids': self.task_id.product_ids,
             'request_docs_ids': self.task_id.document_ids,
-            'specialty': self.specialty_id.name,
+            'maintenance_team_id': self.maintenance_team_id.id,
             'maintenance_type': 'predictive' if self.unit else 'preventive',
             'uom_id': self.unit.id if self.unit else False
         }

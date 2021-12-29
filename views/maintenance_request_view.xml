@@ -32,7 +32,6 @@
                     </attribute>
                 </xpath>
                 <xpath expr="//field[@name='maintenance_type']" position="after">
-                    <field name="specialty" readonly="1"/>
                     <field name="frequency" readonly="1"/>
                 </xpath>
                 <xpath expr="//field[@name='priority']" position="before">

@@ -38,7 +38,6 @@
         'views/maintenance_location_view.xml',
         'views/maintenance_plan_view.xml',
         'views/maintenance_plan_part_view.xml',
-        'views/maintenance_specialty_view.xml',
         'views/maintenance_request_view.xml',
         'views/maintenance_stage_view.xml',
         'views/maintenance_task_view.xml',

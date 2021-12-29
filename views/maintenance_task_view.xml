@@ -67,7 +67,7 @@
                             </group>
                         </group>
                         <group>
-                            <field name="specialty_id"/>
+                            <field name="maintenance_team_id"/>
                         </group>
                         <group>
                             <group>
@@ -161,7 +161,7 @@
                 <pivot string="Maintenance Plan">
                     <field name="part_id" type="row"/>
                     <field name="name" type="row"/>
-                    <field name="specialty_id" type="col"/>
+                    <field name="maintenance_team_id" type="col"/>
                     <field name="duration" type="measure" widget="float_time"/>
                 </pivot>
             </field>
