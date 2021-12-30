@@ -62,7 +62,7 @@
                                         </td>
                                         <td>
                                             <i class="fa fa-clock-o" aria-hidden="true"/>&#160;
-                                            <span t-field="doc.duration" t-options="{'widget': 'float_time'}"/>&#160;Horas
+                                            <span t-field="doc.duration" t-options="{'widget': 'float_time'}"/>&#160;Hours
                                         </td>
                                         <td>
                                             <i class="fa fa-star" aria-hidden="true"/>&#160;
