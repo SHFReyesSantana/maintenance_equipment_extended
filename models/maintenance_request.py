@@ -31,7 +31,8 @@ class MaintenanceRequest(models.Model):
     active = fields.Boolean(default=True)
     attachment_number = fields.Integer(string='Number of Attachments', compute='_compute_attachment_number')
     code = fields.Char(string='Code', required=True, readonly=True, default='New', copy=False)
-    schedule_date_end = fields.Datetime(string='Date End')
+    color_request = fields.Char(string='Color Json', compute="_default_colors")
+    default_group_1 = fields.Char(string='JSON', compute="_default_group_1")
     delivery_count = fields.Integer(string='Delivery Orders', compute='_compute_picking_ids')
     frequency = fields.Char(string='Frequency')
     maintenance_type = fields.Selection(selection_add=[("predictive", "Predictive")])
@@ -39,16 +40,14 @@ class MaintenanceRequest(models.Model):
     picking_ids = fields.One2many(comodel_name='stock.picking', inverse_name='request_id', string='Transfers')
     products_ids = fields.Many2many('maintenance.task.product', string='Products')
     process = fields.Text(string='Process')
+    request_create_date = fields.Datetime('Request Date', default=fields.datetime.now(), help="Date requested for the maintenance to happen")
     request_docs_ids = fields.Many2many('maintenance.task.docs', string='Documents')
+    schedule_date_end = fields.Datetime(string='Date End', compute='_compute_schedule_date')
+    stage_id_id = fields.Integer(related='stage_id.id')
     uom_id = fields.Many2one(comodel_name='uom.uom', string='Unit Measure Predictive')
     uom_val = fields.Float(string="Units")
     duration_request = fields.Float(string='Durations', store=True)
     duration_request_date = fields.Char(compute='_compute_date_request')
-    default_group_1 = fields.Char(string='JSON', compute="_default_group_1")
-    color_request = fields.Char(string='Color Json', compute="_default_colors")
-    stage_id_id = fields.Integer(related='stage_id.id')
-    request_create_date = fields.Datetime('Request Date', default=fields.datetime.now(), help="Date requested for the maintenance to happen")
-
 
     _sql_constraints = [
         ('code_unique',
@@ -62,16 +61,31 @@ class MaintenanceRequest(models.Model):
             vals['code'] = self.env['ir.sequence'].next_by_code('maintenance.request') or '/'
         return super(MaintenanceRequest, self).create(vals)
 
-    @api.onchange('schedule_date', 'duration')
-    def _onchange_schedule_date(self):
-        if self.schedule_date and self.duration:
-            self.schedule_date_end = (self.schedule_date + timedelta(hours=self.duration))
+    @api.onchange('stage_id')
+    def _onchange_stage(self):
+        if self.stage_id.done:
+            if self.uom_id:
+                if self.uom_val > 0:
+                    self.write_measure()
+                else:
+                    raise ValidationError(_("Error in value of measure predictive"))
+                self.write_stage()
 
     @api.depends('duration')
     def _compute_date_request(self):
         for time in self:
             td = timedelta(hours=time.duration)
             time.duration_request_date = datetime.strftime((datetime(1, 1, 1, 0, 0) + td), '%H:%M')
+
+    @api.depends('schedule_date', 'duration')
+    def _compute_schedule_date(self):
+        if self.schedule_date:
+            if self.duration > 0:
+                self.schedule_date_end = (self.schedule_date + timedelta(hours=self.duration))
+            else:
+                self.schedule_date_end = False
+        else:
+            self.schedule_date_end = False
 
     def _compute_picking_ids(self):
         order = self.env['stock.picking'].search([('origin', '=', self.code)])
@@ -130,16 +144,6 @@ class MaintenanceRequest(models.Model):
     def measure_predictive(self):
         pass
 
-    @api.onchange('stage_id')
-    def _onchange_stage(self):
-        if self.stage_id.done:
-            if self.uom_id:
-                if self.uom_val > 0:
-                    self.write_measure()
-                else:
-                    raise ValidationError(_("Error in value of measure predictive"))
-                self.write_stage()
-
     def write_measure(self):
         for measure in self.equipment_id.equipment_measure_ids:
             if measure.uom_id.id == self.uom_id.id:
@@ -183,5 +187,10 @@ class MaintenanceRequest(models.Model):
             }
             color.append(json_obj)
             request.color_request = json.dumps(color)
+
+    def action_start_request(self):
+        for request in self:
+            request.schedule_date = datetime.now()
+            request.stage_id = self.env['maintenance.stage'].search([('start_stage', '=', True)]).id
 
 

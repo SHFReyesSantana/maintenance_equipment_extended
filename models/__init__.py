@@ -8,3 +8,4 @@ from . import maintenance_request
 from . import maintenance_stage
 from . import maintenance_task
 from . import stock_picking
+from . import res_config_settings
